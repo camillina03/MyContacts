@@ -25,6 +25,8 @@ namespace MyContacts.Entities
         [EmailAddress]
         public string Email { get; set; }
 
+
+        [Required]
         public string Citta { get; set; }
     }
 }

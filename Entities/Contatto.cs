@@ -8,25 +8,21 @@ namespace MyContacts.Entities
         //public int Id { get; set; }
 
         [Required]
-        public string Nome { get; set; }
+        public required string Nome { get; set; }
 
         [Required]
-        public string Cognome { get; set; }
+        public required string Cognome { get; set; }
 
         [Required]
-        public string Sesso { get; set; }
-
-        public DateOnly? DataNascita { get; set; }
-
-
-        public string NumeroTelefono { get; set; }
+        public required string Sesso { get; set; }
 
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
+        public required string Email { get; set; }
+        public DateOnly? DataNascita { get; set; }
 
+        public string? NumeroTelefono { get; set; }
 
-        [Required]
-        public string Citta { get; set; }
+        public string? Citta { get; set; }
     }
 }

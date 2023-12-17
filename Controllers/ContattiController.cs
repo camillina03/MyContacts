@@ -1,12 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using MyContacts.Connections;
-using MyContacts.Entities;
 
 namespace MyContacts.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ContattiController : ControllerBase
@@ -21,7 +18,7 @@ namespace MyContacts.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<string>> GetContatti()
         {
-            var contatti = _dbManager.GetContattoData();
+            var contatti = _dbManager.GetAllContatti();
 
             if (contatti.Count == 0)
             {

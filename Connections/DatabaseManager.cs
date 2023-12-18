@@ -6,13 +6,8 @@ namespace MyContacts.Connections
 {
     public class DatabaseManager : DbContext
     {
-        //public DbSet<Contatto> Contatto { get; set; }
 
-        //public DbSet<Contatto> Contatto { get; set; }
-        string nomeServer = "MyContacts.dbo";
-        string dbName = "Contatto";
-
-        private string connectionString = "Data Source=DESKTOP-ANLK1IU\\SQLEXPRESS;Database=MyContacts;Integrated Security=True;Encrypt=True;TrustServerCertificate=True";
+        private string connectionString = "Data Source=lOCALDB\\SQLEXPRESS;Database=MyContacts;Integrated Security=True;Encrypt=True;TrustServerCertificate=True";
 
         public DatabaseManager(DbContextOptions options) : base(options)
         {
@@ -37,10 +32,13 @@ namespace MyContacts.Connections
                         {
                             while (reader.Read())
                             {
-                                var id = reader.GetInt32(0);
-                                var nome = reader.GetString(1);
+                                //TODO : INSERIRE COSTRUTTORE PER CONTATTO 
+                                //var contatto = new Contatto();
 
-                                //contatti.Add($"ID: {id}, Nome: {nome}");
+                                //contatto.Nome = reader.GetString(reader.GetOrdinal("Nome"));
+                                //// Aggiungi altre proprietà del contatto come nell'esempio sopra
+
+                                //contatti.Add(contatto);
                             }
                         }
                     }

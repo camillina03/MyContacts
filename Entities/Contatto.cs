@@ -4,8 +4,6 @@ namespace MyContacts.Entities
 {
     public class Contatto
     {
-        //public int Id { get; set; }
-
         [Required]
         public required string Nome { get; set; }
 

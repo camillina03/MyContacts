@@ -31,7 +31,7 @@ namespace MyContacts.Controllers
         }
 
         [HttpPost]
-        public ActionResult PostContatto(Contatto nuovoContatto)
+        public ActionResult PostContatto([FromBody]Contatto nuovoContatto)
         {
 
             _dbManager.Contatto.Add(nuovoContatto);

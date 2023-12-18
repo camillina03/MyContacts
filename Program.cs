@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Negotiate;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using MyContacts.Connections;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +23,14 @@ builder.Services.AddAuthorization(options =>
     options.FallbackPolicy = options.DefaultPolicy;
 });
 
+builder.Services.AddDbContext<DatabaseManager>(op =>
+    op.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    
+    
+//,optionsLifetime: ServiceLifetime.Singleton);
+
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

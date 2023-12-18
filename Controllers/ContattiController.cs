@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MyContacts.Connections;
+using MyContacts.Entities;
 
 namespace MyContacts.Controllers
 {
@@ -16,7 +18,7 @@ namespace MyContacts.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<string>> GetContatti()
+        public ActionResult<IEnumerable<Contatto>> GetContatti()
         {
             var contatti = _dbManager.GetAllContatti();
 
@@ -26,6 +28,16 @@ namespace MyContacts.Controllers
             }
 
             return Ok(contatti);
+        }
+
+        [HttpPost]
+        public ActionResult PostContatto(Contatto nuovoContatto)
+        {
+
+            _dbManager.Contatto.Add(nuovoContatto);
+            _dbManager.SaveChanges();
+
+            return Ok(nuovoContatto);
         }
     }
 }

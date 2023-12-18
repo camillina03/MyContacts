@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
+using MyContacts.Entities;
 
 namespace MyContacts.Connections
 {
@@ -11,49 +12,50 @@ namespace MyContacts.Connections
         string nomeServer = "MyContacts.dbo";
         string dbName = "Contatto";
 
-        //private string connectionString= "Server=NomeServer;Database=NomeDatabase;User Id=NomeUtente;Password=Password;";
         private string connectionString = "Data Source=DESKTOP-ANLK1IU\\SQLEXPRESS;Database=MyContacts;Integrated Security=True;Encrypt=True;TrustServerCertificate=True";
-        //User ID=DESKTOP-ANLK1IU\\Camilla
-        public DatabaseManager()
-        {
 
+        public DatabaseManager(DbContextOptions options) : base(options)
+        {
         }
 
-        public List<string> GetAllContatti()
+        public List<Contatto> GetAllContatti()
         {
-            List<string> results = new List<string>();
+            var contatti = new List<Contatto>();
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (var connection = new SqlConnection(connectionString))
             {
                 try
                 {
 
-                    string query = "SELECT * FROM Contatto";
+                    var query = "SELECT * FROM Contatto";
 
-                    using (SqlCommand command = new SqlCommand(query, connection))
+                    using (var command = new SqlCommand(query, connection))
                     {
                         connection.Open();
 
-                        using (SqlDataReader reader = command.ExecuteReader())
+                        using (var reader = command.ExecuteReader())
                         {
                             while (reader.Read())
                             {
-                                int id = reader.GetInt32(0);
-                                string nome = reader.GetString(1);
+                                var id = reader.GetInt32(0);
+                                var nome = reader.GetString(1);
 
-                                results.Add($"ID: {id}, Nome: {nome}");
+                                //contatti.Add($"ID: {id}, Nome: {nome}");
                             }
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    results.Add("Errore: " + ex.Message);
+                    Console.WriteLine("Errore: " + ex.Message);
                 }
             }
 
-            return results;
+            return contatti;
         }
+
+        public DbSet<Contatto> Contatto { get; set; }
+
     }
 }
 

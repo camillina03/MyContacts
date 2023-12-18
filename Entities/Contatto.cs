@@ -20,7 +20,8 @@ namespace MyContacts.Entities
         [Required]
         [EmailAddress]
         public required string Mail { get; set; }
-        public DateOnly? DataDiNascita { get; set; }
+
+        public DateTime? DataDiNascita { get; set; }
 
         [ValidPhoneNumber(ErrorMessage = "Il formato del numero di telefono non è valido.")]
         public string? Telefono { get; set; }

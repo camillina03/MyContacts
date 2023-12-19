@@ -25,6 +25,8 @@ namespace MyContacts.Entities
         public string? Telefono { get; set; }
 
         public string? Città { get; set; }
+
+
     }
 
     internal class ValidPhoneNumberAttribute : ValidationAttribute

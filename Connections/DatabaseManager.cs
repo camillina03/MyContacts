@@ -1,13 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
 using MyContacts.Entities;
+using System.Data;
 
 namespace MyContacts.Connections
 {
     public class DatabaseManager : DbContext
     {
 
-        private string connectionString = "Data Source=lOCALDB\\SQLEXPRESS;Database=MyContacts;Integrated Security=True;Encrypt=True;TrustServerCertificate=True";
+        private string connectionString = "Data Source=DESKTOP-ANLK1IU\\SQLEXPRESS;Database=MyContacts;Integrated Security=True;Encrypt=True;TrustServerCertificate=True";
 
         public DatabaseManager(DbContextOptions options) : base(options)
         {
@@ -32,13 +33,30 @@ namespace MyContacts.Connections
                         {
                             while (reader.Read())
                             {
-                                //TODO : INSERIRE COSTRUTTORE PER CONTATTO 
-                                //var contatto = new Contatto();
+                                var telefono = "";
+                                var città = "";
+                                var dataDiNascita = DateTime.MinValue;
+                                var nome = reader.GetString(reader.GetOrdinal("Nome"));
+                                var cognome = reader.GetString(reader.GetOrdinal("Cognome"));
+                                var sesso = reader.GetString(reader.GetOrdinal("Sesso"));
+                                var mail = reader.GetString(reader.GetOrdinal("Mail"));
+                                if (!reader.IsDBNull("Telefono")) {  telefono = reader.GetString(reader.GetOrdinal("Telefono")); }
+                                if (!reader.IsDBNull("Città")) {  città = reader.GetString(reader.GetOrdinal("Città")); }
+                                if (!reader.IsDBNull("DataDiNascita")) {  dataDiNascita = reader.GetDateTime(reader.GetOrdinal("DataDiNascita")); }
 
-                                //contatto.Nome = reader.GetString(reader.GetOrdinal("Nome"));
-                                //// Aggiungi altre proprietà del contatto come nell'esempio sopra
 
-                                //contatti.Add(contatto);
+                                var contatto = new Contatto()
+                                {
+                                    Nome = nome,
+                                    Cognome = cognome,
+                                    Mail = mail,
+                                    Sesso = FromStringToGender(sesso),
+                                    Telefono = telefono,
+                                    Città = città,
+                                    DataDiNascita = dataDiNascita
+                                };
+
+                                contatti.Add(contatto);
                             }
                         }
                     }
@@ -54,6 +72,11 @@ namespace MyContacts.Connections
 
         public DbSet<Contatto> Contatto { get; set; }
 
+        public Gender FromStringToGender(string stringGender)
+        {
+            if (stringGender == "M") return Gender.M;
+            else return Gender.F;
+        }
     }
 }
 

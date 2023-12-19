@@ -39,5 +39,34 @@ namespace MyContacts.Controllers
 
             return Ok(nuovoContatto);
         }
+
+        [HttpPut("{Mail}")]
+        public ActionResult UpdateContatto(String Mail, [FromBody] Contatto contattoModificato)
+        {
+            var contattoEsistente = _dbManager.Contatto.FirstOrDefault(x => x.Mail == Mail);
+
+            if (contattoEsistente == null)
+            {
+                return NotFound(); 
+            }
+
+         
+            contattoEsistente.Nome = contattoModificato.Nome;
+            contattoEsistente.Cognome = contattoModificato.Cognome;
+            contattoEsistente.Sesso = contattoModificato.Sesso;
+            contattoEsistente.Mail = contattoModificato.Mail;
+            contattoEsistente.Telefono = contattoModificato.Telefono;
+            contattoEsistente.Città = contattoModificato.Città;
+            contattoEsistente.DataDiNascita = contattoModificato.DataDiNascita;
+
+
+            _dbManager.SaveChanges();
+
+            return Ok(contattoEsistente);
+        }
+
+
+
+
     }
 }

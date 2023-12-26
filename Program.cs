@@ -45,10 +45,23 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Nome dell'API v1");
     });
 }
-app.UseHttpsRedirection();
+app.UseRouting();
+
+
 
 app.UseAuthorization();
 
 app.MapControllers();
 
+app.UseStaticFiles();
+app.UseEndpoints(endpoints =>
+{
+   
+    endpoints.MapFallbackToFile("/index.html"); // Questa riga serve a reindirizzare tutte le altre richieste al tuo index.html
+
+});
+
 app.Run();
+
+
+

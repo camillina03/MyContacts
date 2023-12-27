@@ -17,7 +17,7 @@ namespace MyContacts.Controllers
             _dbManager = dbManager;
         }
 
-        [HttpGet]
+        [HttpGet("GetContatti")]
         public ActionResult<IEnumerable<Contatto>> GetContatti()
         {
             var contatti = _dbManager.GetAllContatti();
@@ -30,7 +30,7 @@ namespace MyContacts.Controllers
             return Ok(contatti);
         }
 
-        [HttpGet("{Mail}")]
+        [HttpGet("GetContatto{Mail}")]
         public ActionResult<Contatto> GetContatto(string Mail)
         {
             var contatto = _dbManager.GetContattoEsistente(Mail);
@@ -43,7 +43,7 @@ namespace MyContacts.Controllers
             return Ok(contatto);
         }
 
-        [HttpPost]
+        [HttpPost("PostContatto")]
         public ActionResult PostContatto([FromBody]Contatto nuovoContatto)
         {
             try
@@ -99,7 +99,7 @@ namespace MyContacts.Controllers
                         
         }
 
-        [HttpDelete("{Mail}")]
+        [HttpDelete("DeleteContatto{Mail}")]
         public ActionResult DeleteContatto(String Mail)
         {
             var IsContattoEliminato = _dbManager.DeleteContatto($"{Mail}");

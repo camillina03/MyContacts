@@ -1,57 +1,73 @@
-﻿
-    document.addEventListener('DOMContentLoaded', function () {
-        const contattiContainer = document.getElementById('contatti-lista');
-        const formContatto = document.getElementById('form-contatto');
-
-        // Funzione per recuperare e visualizzare i contatti
-        function fetchAndShowContatti() {
-            fetch('http://localhost:5000/api/Contatti')
-                .then(response => response.json())
-                .then(data => {
-                    contattiContainer.innerHTML = ''; // Svuota il contenitore dei contatti
-                    data.forEach(contatto => {
-                        contattiContainer.innerHTML += `
-                        <div>
-                            <strong>${contatto.nome} ${contatto.cognome}</strong><br>
-                            Email: ${contatto.email}<br><br>
-                        </div>
-                    `;
-                    });
-                })
-                .catch(error => console.error('Errore:', error));
+﻿async function fetchContacts() {
+    try {
+        const response = await fetch('/api/Contatti/GetContatti'); // Sostituisci con il tuo URL dell'API
+        if (!response.ok) {
+            throw new Error('Errore nella richiesta.');
         }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Si è verificato un errore:', error);
+        return []; // Ritorna un array vuoto in caso di errore
+    }
+}
 
-        // Visualizza i contatti all'avvio della pagina
-        fetchAndShowContatti();
+// Funzione per popolare la tabella con i dati ottenuti dalla API
+async function renderContactsFromApi() {
+    const tableBody = document.getElementById('contactTable');
+    const contatti = await fetchContacts();
 
-        // Aggiungi un listener al form per l'invio di un nuovo contatto
-        formContatto.addEventListener('submit', function (event) {
-            event.preventDefault(); // Evita il comportamento predefinito del form
+    contatti.forEach(contact => {
+        const row = document.createElement('tr');
+        const birthDate = new Date(contact.dataDiNascita);
+        row.innerHTML = `
+            <td>${contact.nome}</td>
+            <td>${contact.cognome}</td>
+            <td>${contact.mail}</td>
+            <td>${contact.telefono}</td>
+            <td>${contact.città}</td>
+            <td>${contact.sesso == 0 ? "Femmina" : "Maschio"}</td>
+            <td>${contact.dataDiNascita.toString() != "0001-01-01T00:00:00" ? birthDate.toLocaleDateString() : ""}</td>
+         `;
 
-            const nome = document.getElementById('nome').value;
-            const cognome = document.getElementById('cognome').value;
-            const email = document.getElementById('email').value;
+        //listener per fare in modo che le righe della tabella siano cliccabili
+        row.addEventListener('click', () => {
+            const selectedRow = document.querySelector('.selected');
+            if (selectedRow) {
+                selectedRow.classList.remove('selected');
+                selectedRow.querySelector('.buttons').remove();
+            }
 
-            const nuovoContatto = {
-                nome: nome,
-                cognome: cognome,
-                email: email
-            };
-
-            fetch('http://localhost:5000/api/Contatti', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(nuovoContatto)
-            })
-                .then(response => response.json())
-                .then(data => {
-                    // Aggiorna la lista dei contatti dopo l'aggiunta di uno nuovo
-                    fetchAndShowContatti();
-                    formContatto.reset(); // Resetta il form dopo l'aggiunta del contatto
-                })
-                .catch(error => console.error('Errore:', error));
+            row.classList.add('selected');
+            const buttonsContainer = document.createElement('div');
+            buttonsContainer.classList.add('buttons');
+            buttonsContainer.classList.add('buttons-section');
+            buttonsContainer.innerHTML = `
+                <button onclick="showDetails(${contact.mail})">Dettagli</button>
+                <button onclick="updateContact(${contact.mail})">Aggiorna</button>
+                <button onclick="deleteContact(${contact.mail})">Elimina</button>
+            `;
+            row.appendChild(buttonsContainer);
         });
-    });
 
+        tableBody.appendChild(row);
+    });
+}
+
+// Chiama la funzione per popolare la tabella al caricamento della pagina
+
+async function showDetails(mail) {
+    try {
+        const response = await fetch(`/api/contatti/GetContatto${mail}`);
+        if (!response.ok) {
+            throw new Error('Errore nella richiesta.');
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Si è verificato un errore durante il recupero dei dettagli del contatto:', error);
+    }
+}
+window.onload = function () {
+    renderContactsFromApi();
+};

@@ -17,7 +17,7 @@ namespace MyContacts.Controllers
             _dbManager = dbManager;
         }
 
-        [HttpGet]
+        [HttpGet("GetAllCittà")]
         public ActionResult<IEnumerable<Città>> GetAllCittà()
         {
             var città = _dbManager.GetAllCittà();
@@ -29,27 +29,6 @@ namespace MyContacts.Controllers
 
             return Ok(città);
         }
-
-        //[HttpGet("{Nome}")]
-        //public ActionResult<Città> GetCittà(string nome )
-        //{
-        //    var città = _dbManager.GetCittà(nome);
-
-        //    if (città== null)
-        //    {
-        //        return NotFound("Città non trovata.");
-        //    }
-
-        //    return Ok(città);
-        //}
-
-
-
-
-
-
-
-
 
     }
 }

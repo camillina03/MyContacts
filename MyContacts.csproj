@@ -29,8 +29,4 @@
     <None Include="wwwroot\js\GestisciContatti.js" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Views\Home\" />
-  </ItemGroup>
-
 </Project>
